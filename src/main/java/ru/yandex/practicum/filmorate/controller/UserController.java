@@ -19,23 +19,23 @@ public class UserController {
     private int id = 1;
 
     @GetMapping("/users")
-    public List<User> findAll(){
+    public List<User> findAll() {
         return new ArrayList<>(users.values());
     }
 
     @PostMapping("/users")
-    public User create(@Valid @RequestBody User user){
+    public User create(@Valid @RequestBody User user) {
         user.setId(id++);
-        if(user.getName() == null || user.getName().isBlank()) user.setName(user.getLogin());
-        users.put(user.getId(),user);
+        if (user.getName() == null || user.getName().isBlank()) user.setName(user.getLogin());
+        users.put(user.getId(), user);
         log.info("добавлен пользователь: " + user);
         return user;
     }
 
     @PutMapping("/users")
-    public User update(@Valid @RequestBody User user){
-        if(user.getId() == 0 || !users.containsKey(user.getId())) throw  new IDUnknownException("неизвестный ID");
-        users.put(user.getId(),user);
+    public User update(@Valid @RequestBody User user) {
+        if (user.getId() == 0 || !users.containsKey(user.getId())) throw new IDUnknownException("неизвестный ID");
+        users.put(user.getId(), user);
         log.info("изменен пользователь: " + user);
         return user;
     }

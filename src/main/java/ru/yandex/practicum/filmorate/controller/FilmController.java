@@ -18,22 +18,22 @@ public class FilmController {
     private int id = 1;
 
     @GetMapping("/films")
-    public List<Film> findAll(){
+    public List<Film> findAll() {
         return new ArrayList<>(films.values());
     }
 
     @PostMapping("/films")
-    public Film create(@Valid @RequestBody Film film){
+    public Film create(@Valid @RequestBody Film film) {
         film.setId(id++);
-        films.put(film.getId(),film);
+        films.put(film.getId(), film);
         log.info("добавлен фильм: " + film);
         return film;
     }
 
     @PutMapping("/films")
-    public Film update(@Valid @RequestBody Film film){
-        if(film.getId() == 0 || !films.containsKey(film.getId())) throw new IDUnknownException("неизвестный ID");
-        films.put(film.getId(),film);
+    public Film update(@Valid @RequestBody Film film) {
+        if (film.getId() == 0 || !films.containsKey(film.getId())) throw new IDUnknownException("неизвестный ID");
+        films.put(film.getId(), film);
         log.info("изменён фильм: " + film);
         return film;
     }
