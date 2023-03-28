@@ -12,29 +12,29 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserControllerTest {
     private User user;
-    private  UserController userController;
+    private UserController userController;
 
     @BeforeEach
-    public void setData(){
+    public void setData() {
         user = new User();
         user.setId(1);
         user.setName("Dave");
         user.setLogin("0xDave");
-        user.setBirthday(LocalDate.of(2005,1,1));
+        user.setBirthday(LocalDate.of(2005, 1, 1));
         user.setEmail("simple@id.ru");
 
         userController = new UserController();
     }
 
     @Test
-    public void NotCorrectID(){
+    public void notCorrectID() {
         userController.create(user);
         user.setId(2);
-        assertThrows(IDUnknownException.class,() -> userController.update(user));
+        assertThrows(IDUnknownException.class, () -> userController.update(user));
     }
 
     @Test
-    public void NotNameUser(){
+    public void notNameUser() {
         user.setName("");
         User nUser = userController.create(user);
         assertEquals(nUser.getName(), nUser.getLogin());

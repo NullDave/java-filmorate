@@ -12,24 +12,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FilmControllerTest {
     private Film film;
-    private  FilmController filmController;
+    private FilmController filmController;
 
     @BeforeEach
-    public void setData(){
+    public void setData() {
         film = new Film();
         film.setId(1);
         film.setName("Clone");
         film.setDescription("Клон Бразильский хит");
-        film.setReleaseDate(LocalDate.of(2001,1,1));
+        film.setReleaseDate(LocalDate.of(2001, 1, 1));
         film.setDuration(90000000);
 
         filmController = new FilmController();
     }
 
     @Test
-    public void NotCorrectID(){
+    public void notCorrectID() {
         filmController.create(film);
         film.setId(2);
-        assertThrows(IDUnknownException.class,() -> filmController.update(film));
+        assertThrows(IDUnknownException.class, () -> filmController.update(film));
     }
 }
