@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exception.IDUnknownException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
@@ -30,6 +30,6 @@ class FilmControllerTest {
     public void notCorrectID() {
         filmController.create(film);
         film.setId(2);
-        assertThrows(IDUnknownException.class, () -> filmController.update(film));
+        assertThrows(NotFoundException.class, () -> filmController.update(film));
     }
 }

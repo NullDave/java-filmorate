@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.IDUnknownException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
@@ -34,7 +34,7 @@ public class UserController {
 
     @PutMapping("/users")
     public User update(@Valid @RequestBody User user) {
-        if (user.getId() == 0 || !users.containsKey(user.getId())) throw new IDUnknownException("неизвестный ID");
+        if (!users.containsKey(user.getId())) throw new NotFoundException("неизвестный ID");
         users.put(user.getId(), user);
         log.info("изменен пользователь: " + user);
         return user;

@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.IDUnknownException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
@@ -32,7 +32,7 @@ public class FilmController {
 
     @PutMapping("/films")
     public Film update(@Valid @RequestBody Film film) {
-        if (film.getId() == 0 || !films.containsKey(film.getId())) throw new IDUnknownException("неизвестный ID");
+        if (!films.containsKey(film.getId())) throw new NotFoundException("неизвестный ID");
         films.put(film.getId(), film);
         log.info("изменён фильм: " + film);
         return film;
