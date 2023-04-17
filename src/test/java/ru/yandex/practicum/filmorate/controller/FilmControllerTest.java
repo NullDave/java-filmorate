@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class FilmControllerTest {
     private Film film;
     private FilmController filmController;
+
     @BeforeEach
     public void setData() {
         film = new Film();
@@ -25,7 +26,7 @@ class FilmControllerTest {
         film.setReleaseDate(LocalDate.of(2001, 1, 1));
         film.setDuration(90000000);
 
-        filmController = new FilmController(new FilmService(new InMemoryFilmStorage(),new InMemoryUserStorage()));
+        filmController = new FilmController(new FilmService(new InMemoryFilmStorage(), new InMemoryUserStorage()));
     }
 
     @Test
