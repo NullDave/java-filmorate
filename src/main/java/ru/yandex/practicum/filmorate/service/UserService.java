@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.Errors;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -31,13 +31,15 @@ public class UserService {
 
     public User get(Long userId) {
         Optional<User> user = userStorage.get(userId);
-        if (user.isEmpty()) throw Errors.notFoundUser(userId);
+        if (user.isEmpty())
+            throw new NotFoundException(String.format("Не удалось найти пользователя с id =%d", userId));
         return user.get();
     }
 
     public List<User> getFriends(Long userId) {
         Optional<User> user = userStorage.get(userId);
-        if (user.isEmpty()) throw Errors.notFoundUser(userId);
+        if (user.isEmpty())
+            throw new NotFoundException(String.format("Не удалось найти пользователя с id =%d", userId));
         return user.get().getFriendsId().stream()
                 .map(userStorage::get)
                 .filter(Optional::isPresent)
@@ -58,9 +60,9 @@ public class UserService {
                 friendUser.get().getFriendsId().add(userId);
                 return user.get();
             }
-            throw Errors.notFoundUser(friendId);
+            throw new NotFoundException(String.format("Не удалось найти пользователя с id =%d", friendId));
         }
-        throw Errors.notFoundUser(userId);
+        throw new NotFoundException(String.format("Не удалось найти пользователя с id =%d", userId));
     }
 
     public User removeFriend(Long userId, Long friendId) {
@@ -72,9 +74,9 @@ public class UserService {
                 friendUser.get().getFriendsId().remove(userId);
                 return user.get();
             }
-            throw Errors.notFoundUser(friendId);
+            throw new NotFoundException(String.format("Не удалось найти пользователя с id =%d", friendId));
         }
-        throw Errors.notFoundUser(userId);
+        throw new NotFoundException(String.format("Не удалось найти пользователя с id =%d", userId));
     }
 
     public List<User> getCommonFriends(Long userId, Long otherUserId) {
@@ -90,9 +92,9 @@ public class UserService {
                         .map(Optional::get)
                         .collect(Collectors.toList());
             }
-            throw Errors.notFoundUser(otherUserId);
+            throw new NotFoundException(String.format("Не удалось найти пользователя с id =%d", otherUserId));
         }
-        throw Errors.notFoundUser(userId);
+        throw new NotFoundException(String.format("Не удалось найти пользователя с id =%d", userId));
     }
 
 }

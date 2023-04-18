@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.Errors;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -28,7 +28,7 @@ public class FilmService {
 
     public Film get(Long id) {
         Optional<Film> film = filmStorage.get(id);
-        if (film.isEmpty()) throw Errors.notFoundFilm(id);
+        if (film.isEmpty()) throw new NotFoundException(String.format("Не удалось найти фильм с id =%d", id));
         return film.get();
     }
 
@@ -47,21 +47,21 @@ public class FilmService {
                 film.get().getLikes().add(userid);
                 return film.get();
             }
-            throw Errors.notFoundUser(userid);
+            throw new NotFoundException(String.format("Не удалось найти пользователя с id =%d", userid));
         }
-        throw Errors.notFoundFilm(filmId);
+        throw new NotFoundException(String.format("Не удалось найти фильм с id =%d", filmId));
     }
 
-    public Film removeLike(long filmId, long userid) {
+    public Film removeLike(long filmId, long userId) {
         Optional<Film> film = filmStorage.get(filmId);
         if (film.isPresent()) {
-            if (userStorage.get(userid).isPresent()) {
-                film.get().getLikes().remove(userid);
+            if (userStorage.get(userId).isPresent()) {
+                film.get().getLikes().remove(userId);
                 return film.get();
             }
-            throw Errors.notFoundUser(userid);
+            throw new NotFoundException(String.format("Не удалось найти пользователя с id =%d", userId));
         }
-        throw Errors.notFoundFilm(filmId);
+        throw new NotFoundException(String.format("Не удалось найти фильм с id =%d", filmId));
     }
 
     public List<Film> getTop(int count) {
