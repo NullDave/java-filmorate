@@ -23,6 +23,8 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private int duration;
+    private Set<Genre> genres = new HashSet<>();
+    private MpaRating mpaRating;
     private Set<Long> likes = new HashSet<>();
 
 }
