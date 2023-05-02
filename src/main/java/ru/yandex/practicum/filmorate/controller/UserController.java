@@ -1,42 +1,61 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@Slf4j
 @RestController
+@RequestMapping(value = "/users")
 public class UserController {
+    private final UserService service;
 
-    private final Map<Integer, User> users = new HashMap<>();
-    private int id = 1;
+    @Autowired
+    public UserController(UserService service) {
+        this.service = service;
+    }
 
-    @GetMapping("/users")
+    @GetMapping
     public List<User> findAll() {
-        return new ArrayList<>(users.values());
+        return service.getAll();
     }
 
-    @PostMapping("/users")
+    @GetMapping("/{id}")
+    public User find(@PathVariable(name = "id") long userId) {
+        return service.get(userId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable(name = "id") long userId) {
+        return service.getFriends(userId);
+    }
+
+    @PostMapping
     public User create(@Valid @RequestBody User user) {
-        user.setId(id++);
-        if (user.getName() == null || user.getName().isBlank()) user.setName(user.getLogin());
-        users.put(user.getId(), user);
-        log.info("добавлен пользователь: " + user);
-        return user;
+        return service.add(user);
     }
 
-    @PutMapping("/users")
+    @PutMapping
     public User update(@Valid @RequestBody User user) {
-        if (!users.containsKey(user.getId())) throw new NotFoundException("неизвестный ID");
-        users.put(user.getId(), user);
-        log.info("изменен пользователь: " + user);
-        return user;
+        return service.update(user);
     }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable(name = "id") long userId, @PathVariable(name = "friendId") long friendId) {
+        return service.addFriend(userId, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User removeFriend(@PathVariable(name = "id") long userId, @PathVariable(name = "friendId") long friendId) {
+        return service.removeFriend(userId, friendId);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> findAll(@PathVariable(name = "id") long userId, @PathVariable(name = "otherId") long otherId) {
+        return service.getCommonFriends(userId, otherId);
+    }
+
 }
