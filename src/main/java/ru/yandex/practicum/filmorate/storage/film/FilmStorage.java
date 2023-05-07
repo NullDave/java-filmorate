@@ -14,4 +14,6 @@ public interface FilmStorage {
     List<Film> getAll();
 
     Optional<Film> get(long id);
+
+    boolean contains(long id);
 }

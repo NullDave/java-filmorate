@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -24,12 +25,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User find(@PathVariable(name = "id") long userId) {
+    public User find(@Valid @Min(1) @PathVariable(name = "id") long userId) {
         return service.get(userId);
     }
 
     @GetMapping("/{id}/friends")
-    public List<User> getFriends(@PathVariable(name = "id") long userId) {
+    public List<User> getFriends(@Valid @Min(1) @PathVariable(name = "id") long userId) {
         return service.getFriends(userId);
     }
 
@@ -44,17 +45,20 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addFriend(@PathVariable(name = "id") long userId, @PathVariable(name = "friendId") long friendId) {
-        return service.addFriend(userId, friendId);
+    public void addFriend(@Valid @Min(1) @PathVariable(name = "id") long userId,
+                          @Valid @Min(1) @PathVariable(name = "friendId") long friendId) {
+        service.addFriend(userId, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User removeFriend(@PathVariable(name = "id") long userId, @PathVariable(name = "friendId") long friendId) {
-        return service.removeFriend(userId, friendId);
+    public void removeFriend(@Valid @Min(1) @PathVariable(name = "id") long userId,
+                             @Valid @Min(1) @PathVariable(name = "friendId") long friendId) {
+        service.removeFriend(userId, friendId);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public List<User> findAll(@PathVariable(name = "id") long userId, @PathVariable(name = "otherId") long otherId) {
+    public List<User> findAll(@Valid @Min(1) @PathVariable(name = "id") long userId,
+                              @Valid @Min(1) @PathVariable(name = "otherId") long otherId) {
         return service.getCommonFriends(userId, otherId);
     }
 
