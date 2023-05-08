@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.mapper.EntityMapper;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
@@ -72,7 +73,7 @@ public class FilmDbStorage implements FilmStorage {
                 "FROM films AS film " +
                 "JOIN mpa_ratings AS mpa ON film.rating_id=mpa.id " +
                 "GROUP BY film.id";
-        List<Film> films = jdbcTemplate.query(sql, (rs, rowNum) -> Film.mapingFilm(rs));
+        List<Film> films = jdbcTemplate.query(sql, (rs, rowNum) -> EntityMapper.mapingFilm(rs));
         films.forEach(film -> film.setGenres(getGenresFilm(film.getId())));
         return films;
     }
@@ -86,7 +87,7 @@ public class FilmDbStorage implements FilmStorage {
                 "WHERE film.id = ?" +
                 "GROUP BY film.id";
 
-        Optional<Film> film = jdbcTemplate.query(sql, new Object[]{id}, (rs, rowNum) -> Film.mapingFilm(rs)).stream()
+        Optional<Film> film = jdbcTemplate.query(sql, new Object[]{id}, (rs, rowNum) -> EntityMapper.mapingFilm(rs)).stream()
                 .findFirst();
         film.ifPresent(value -> value.setGenres(getGenresFilm(id)));
         return film;
@@ -104,7 +105,7 @@ public class FilmDbStorage implements FilmStorage {
                 "LEFT JOIN genres AS genre ON genre.id=fg.genre_id " +
                 "WHERE film_id = ? " +
                 "GROUP BY id";
-        return new HashSet<>(jdbcTemplate.query(sql, new Object[]{id}, (rs, rowNum) -> Genre.mappingGenre(rs)));
+        return new HashSet<>(jdbcTemplate.query(sql, new Object[]{id}, (rs, rowNum) -> EntityMapper.mappingGenre(rs)));
     }
 
 }

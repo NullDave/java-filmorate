@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.mapper.EntityMapper;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.Date;
@@ -57,14 +58,14 @@ public class UserDbStorage implements UserStorage {
     public List<User> getAll() {
         String sql = "SELECT * FROM users;";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> User.mapingUser(rs));
+        return jdbcTemplate.query(sql, (rs, rowNum) -> EntityMapper.mapingUser(rs));
     }
 
     @Override
     public Optional<User> get(long id) {
         String sql = "SELECT * FROM users WHERE id = ?";
 
-        return jdbcTemplate.query(sql, new Object[]{id}, (rs, rowNum) -> User.mapingUser(rs)).stream().findFirst();
+        return jdbcTemplate.query(sql, new Object[]{id}, (rs, rowNum) -> EntityMapper.mapingUser(rs)).stream().findFirst();
     }
 
     @Override
