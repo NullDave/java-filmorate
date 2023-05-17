@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.storage.genre;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.mapper.EntityMapper;
+import ru.yandex.practicum.filmorate.mapper.GenreMapper;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.List;
@@ -19,13 +19,13 @@ public class GenreDbStorage implements GenreStorage {
     @Override
     public Optional<Genre> get(int id) {
         String sql = "SELECT * FROM genres WHERE id = ?";
-        return jdbcTemplate.query(sql, new Object[]{id}, (rs, rowNum) -> EntityMapper.mappingGenre(rs)).stream().findFirst();
+        return jdbcTemplate.query(sql, new Object[]{id}, (rs, rowNum) -> GenreMapper.mappingGenre(rs)).stream().findFirst();
     }
 
     @Override
     public List<Genre> getAll() {
         String sql = "SELECT * FROM genres GROUP BY id";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> EntityMapper.mappingGenre(rs));
+        return jdbcTemplate.query(sql, (rs, rowNum) -> GenreMapper.mappingGenre(rs));
     }
 
     @Override

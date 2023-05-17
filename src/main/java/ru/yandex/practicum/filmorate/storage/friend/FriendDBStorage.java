@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.storage.friend;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.mapper.EntityMapper;
+import ru.yandex.practicum.filmorate.mapper.UserMapper;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class FriendDBStorage implements FriendStorage {
                 "WHERE friends.user_id = ? " +
                 "GROUP BY id";
 
-        return jdbcTemplate.query(sql, new Object[]{userId}, (rs, rowNum) -> EntityMapper.mapingUser(rs));
+        return jdbcTemplate.query(sql, new Object[]{userId}, (rs, rowNum) -> UserMapper.mapingUser(rs));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class FriendDBStorage implements FriendStorage {
                 "INNER JOIN friends AS f2 ON f2.friend_id = u.id AND f2.user_id = ? " +
                 "GROUP BY u.id";
 
-        return jdbcTemplate.query(sql, new Object[]{userId, otherUserId}, (rs, rowNum) -> EntityMapper.mapingUser(rs));
+        return jdbcTemplate.query(sql, new Object[]{userId, otherUserId}, (rs, rowNum) -> UserMapper.mapingUser(rs));
 
     }
 

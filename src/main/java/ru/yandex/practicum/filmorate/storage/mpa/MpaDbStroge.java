@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.storage.mpa;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.mapper.EntityMapper;
+import ru.yandex.practicum.filmorate.mapper.MpaMapper;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.List;
@@ -19,14 +19,14 @@ public class MpaDbStroge implements MpaStorage {
     @Override
     public Optional<Mpa> get(int id) {
         String sql = "SELECT * FROM mpa_ratings WHERE id = ?";
-        return jdbcTemplate.query(sql, new Object[]{id}, (rs, rowNum) -> EntityMapper.mapingMpa(rs)).stream().findFirst();
+        return jdbcTemplate.query(sql, new Object[]{id}, (rs, rowNum) -> MpaMapper.mapingMpa(rs)).stream().findFirst();
     }
 
 
     @Override
     public List<Mpa> getAll() {
         String sql = "SELECT * FROM mpa_ratings GROUP BY id";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> EntityMapper.mapingMpa(rs));
+        return jdbcTemplate.query(sql, (rs, rowNum) -> MpaMapper.mapingMpa(rs));
     }
 
     @Override

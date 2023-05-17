@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.storage.like;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.mapper.EntityMapper;
+import ru.yandex.practicum.filmorate.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
@@ -39,6 +39,6 @@ public class LikeDbStorage implements LikeStorage {
                 "GROUP BY film.id, genre.id, mpa.id " +
                 "ORDER BY COUNT(film_likes.user_id) DESC " +
                 "LIMIT ?";
-        return jdbcTemplate.query(sql, new Object[]{count}, (rs, rowNum) -> EntityMapper.mapingFilm(rs));
+        return jdbcTemplate.query(sql, new Object[]{count}, (rs, rowNum) -> FilmMapper.mapingFilm(rs));
     }
 }
